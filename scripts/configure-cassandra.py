@@ -16,7 +16,7 @@ class bcolors:
 
 
 userEditableSettings = ["cluster_name", "seeds", "listen_address",
-                        "rpc_address", "endpoint_snitch"]
+                        "rpc_address", "endpoint_snitch", "broadcast_address"]
 
 with open(os.environ["CASSANDRA_HOME"] + '/conf/cassandra.yaml') as file:
     configurationDocument = yaml.safe_load(file)
@@ -32,6 +32,11 @@ with open(os.environ["CASSANDRA_HOME"] + '/conf/cassandra.yaml') as file:
 
                 if configToChange == "seeds":
                     configurationDocument["seed_provider"][0]["parameters"][0]["seeds"] = envValue
+
+                elif configToChange == "broadcast_address":
+                    # When running in docker private IP is different then public IP, so these configurations are needed in order to gossip with other cassandra instances
+                    configurationDocument["broadcast_address"] = envValue
+                    configurationDocument["broadcast_rpc_address"] = envValue
 
                 else:
                     configurationDocument[configToChange] = envValue
