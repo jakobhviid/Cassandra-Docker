@@ -1,0 +1,5 @@
+Lav en bedre løsning end configure-cassandra.py med manuelt checking, det er nemlig heller ikke alle konfigurationer der skal kunne sættes
+
+Cassandra bruger automatisk så meger ram som hosten har, derfor hvis det her image skal benyttes på en computer med andre images skal det kunne være muligt at sætte HEAP_SIZE via environment variabel
+
+Hvis der er nogle konfigurationer som SKAL sættes for at docker filen virker efter hensigten, så bare lav en liste i python af de required konfigurationer og et lille tjek for om environment variabler indeholder alle dem

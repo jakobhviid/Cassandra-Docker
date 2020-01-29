@@ -1,15 +1,30 @@
 version: "3"
 
 services: 
-  cassandra:
-    image: omvk97/cassandra:0.0.16
-    container_name: cassandra
+  cassandra1:
+    image: omvk97/cassandra:latest
+    container_name: cassandra1
+    ports:
+      - 7000:7000
+      - 9042:9042
     environment:
-      CASSANDRA_CLUSTER_NAME: "test"
-      CASSANDRA_SEED_PROVIDER-0:PARAMETERS-0:SEEDS: "testingseeds"
-      CASSANDRA_STORAGE_PORT: "whaaat TESTING STORAGE PORT"
-      CASSANDRA_LISTEN_ADDRESS: "TESTING LISTEN ADDRESS"
-      CASSANDRA_NATIVE_TRANSPORT_PORT: "TESTING NATIEVE TRANSPORT PORT"
-      CASSANDRA_DATA_FILE_DIRECTORIES: "TESTIN DATA FILE DIRECTORIES"
-      CASSANDRA_COMMITLOG_DIRECTORY: "TESTING COMMITLOG_DIRECTORY"
+      CASSANDRA_CLUSTER_NAME: "test-cluster"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2"
+      CASSANDRA_LISTEN_ADDRESS: "cassandra1"
+      CASSANDRA_RPC_ADDRESS: "cassandra1"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+    restart: always
+
+  cassandra2:
+    image: omvk97/cassandra:latest
+    container_name: cassandra2
+    ports:
+      - 7001:7000
+      - 9043:9042
+    environment:
+      CASSANDRA_CLUSTER_NAME: "test-cluster"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2"
+      CASSANDRA_LISTEN_ADDRESS: "cassandra2"
+      CASSANDRA_RPC_ADDRESS: "cassandra2"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
     restart: always
