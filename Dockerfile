@@ -1,24 +1,32 @@
 FROM ubuntu:18.04
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-8-jre-headless
+ENV CASSANDRA_HOME=/opt/cassandra
+
+RUN apt update && \
+    apt install -y --no-install-recommends openjdk-8-jre-headless && \
+    apt install -y python python-pip && \
+    pip install pyyaml
 
 # Copy necessary scripts + configuration
 COPY scripts /tmp/
-RUN chmod +x /tmp/*.sh && \
-    mv /tmp/*.sh /usr/bin && \
-    rm -rf /tmp/*.sh
+RUN chmod +x /tmp/*.py && \
+    chmod +x /tmp/*.sh && \
+    mv /tmp/* /usr/bin && \
+    rm -rf /tmp/*
 
-# Install Cassabdra
-# ADD http://ftp.download-by.net/apache/cassandra/3.11.5/apache-cassandra-3.11.5-bin.tar.gz /opt/
-COPY ./apache-cassandra-3.11.5-bin.tar.gz /opt/
+# Install Cassandra
+COPY ./apache-cassandra-3.11.5-bin.tar.gz configuration.yaml /opt/
 RUN cd /opt && \
     tar -xzf apache-cassandra-3.11.5-bin.tar.gz && \
-    mv apache-cassandra-3.11.5 cassandra && \
+    mv apache-cassandra-3.11.5 ${CASSANDRA_HOME} && \
     rm -rf /opt/apache-cassandra-3.11.5-bin.tar.gz && \
-    mkdir /data && mkdir /data/cassandra
+    mv /opt/configuration.yaml ${CASSANDRA_HOME}/conf/cassandra.yaml
 
-HEALTHCHECK --interval=30s --timeout=20s --start-period=15s --retries=2 CMD [ "healthcheck.sh" ]
+HEALTHCHECK --interval=45s --timeout=30s --start-period=60s --retries=3 CMD [ "healthcheck.sh" ]
+
+EXPOSE 9042 7000
+
+VOLUME [ "${CASSANDRA_HOME}/data", "${CASSANDRA_HOME}/logs" ]
 
 WORKDIR /opt/cassandra
 
