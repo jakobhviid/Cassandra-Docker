@@ -2,18 +2,20 @@ version: "3"
 
 services:
   cassandra:
-    image: omvk97/cassandra:0.6
+    image: omvk97/cassandra:0.6.11
     container_name: cassandra
     ports:
       - 7000:7000
       - 9042:9042
-    environment:
-      CASSANDRA_CLUSTER_NAME: "test-cluster"
-      CASSANDRA_SEEDS: "157.245.160.136,167.71.148.171,167.172.127.169"
-      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
-      CASSANDRA_LISTEN_ADDRESS: "cassandra"
-      CASSANDRA_RPC_ADDRESS: "cassandra"
-      CASSANDRA_BROADCAST_ADDRESS: "167.71.148.171"
-      MAX_HEAP_SIZE: 6G
-      HEAP_NEWSIZE: 600M
+    # environment:
+      # CASSANDRA_CLUSTER_NAME: "test-cluster"
+      # CASSANDRA_SEEDS: "cassandra"
+      # CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+      # CASSANDRA_LISTEN_ADDRESS: "cassandra"
+      # CASSANDRA_RPC_ADDRESS: "cassandra"
+      # CASSANDRA_BROADCAST_ADDRESS: "localhost"
+      # CASSANDRA_DATACENTER: dc1Test
+      # CASSANDRA_RACK: rack1Test
+      # MAX_HEAP_SIZE: 2G
+      # HEAP_NEWSIZE: 200M
     restart: always

@@ -15,11 +15,12 @@ RUN chmod +x /tmp/*.py && \
     rm -rf /tmp/*
 
 # Install Cassandra
-COPY ./apache-cassandra-3.11.5-bin.tar.gz /opt/
+COPY ./apache-cassandra-3.11.5-bin.tar.gz configuration.yaml /opt/
 RUN cd /opt && \
     tar -xzf apache-cassandra-3.11.5-bin.tar.gz && \
-    mv apache-cassandra-3.11.5 cassandra && \
-    rm -rf /opt/apache-cassandra-3.11.5-bin.tar.gz
+    mv apache-cassandra-3.11.5 ${CASSANDRA_HOME} && \
+    rm -rf /opt/apache-cassandra-3.11.5-bin.tar.gz && \
+    mv /opt/configuration.yaml ${CASSANDRA_HOME}/conf/cassandra.yaml
 
 HEALTHCHECK --interval=45s --timeout=30s --start-period=60s --retries=3 CMD [ "healthcheck.sh" ]
 
@@ -28,7 +29,5 @@ EXPOSE 9042 7000
 VOLUME [ "${CASSANDRA_HOME}/data", "${CASSANDRA_HOME}/logs" ]
 
 WORKDIR /opt/cassandra
-
-RUN apt install nano -y
 
 CMD [ "start.sh" ]
