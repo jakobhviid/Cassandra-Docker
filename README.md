@@ -40,9 +40,9 @@ For a clustered setup, a few more configurations are needed. ([configurations](#
 
 * `CASSANDRA_NUM_TOKENS:` The number of tokens on the node. The more tokens the more data the node will store compared to other cassandra nodes. This is relevant if your cassandra nodes have different hardware ressources, you might want to have a higher number of tokens on the better performing machines. Defaults to 256. [For clarification read here](http://cassandra.apache.org/doc/latest/configuration/cassandra_config_file.html#num-tokens).
 
-* `CASSANDRA_AUTHENTICATOR:` Authentication of users. Defaults to 'PasswordAuthenticator'. Can be set to 'AllowAllAuthenticator' to disable logins, not recommended. ([Authentication & Authorization adjustments](#authentication-&-authorization))
+* `CASSANDRA_AUTHENTICATOR:` Authentication of users. Defaults to 'PasswordAuthenticator'. Can be set to 'AllowAllAuthenticator' to disable logins, not recommended. ([Authentication & Authorization adjustments](#authentication--authorization))
 
-* `CASSANDRA_AUTHORIZER:` Authorization of users to limit permissions. Defaults to 'CassandraAuthorizer'. Can be set to 'AllowAllAuthorizer' to disable authorization, not recommended. ([Authentication & Authorization adjustments](#authentication-&-authorization))
+* `CASSANDRA_AUTHORIZER:` Authorization of users to limit permissions. Defaults to 'CassandraAuthorizer'. Can be set to 'AllowAllAuthorizer' to disable authorization, not recommended. ([Authentication & Authorization adjustments](#authentication--authorization))
 
 # Authentication & Authorization
 By default this image comes with cassandra out of the box authentication, authorization and role management. This means that when starting a node you will have access to a default superuser:
