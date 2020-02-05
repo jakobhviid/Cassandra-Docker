@@ -1,1 +1,0 @@
-Cassandra bruger automatisk så meger ram som hosten har, derfor hvis det her image skal benyttes på en computer med andre images skal det kunne være muligt at sætte HEAP_SIZE via environment variabel
