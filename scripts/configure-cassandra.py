@@ -6,19 +6,24 @@ import fcntl
 import os
 import sys
 import yaml
+import tempfile
 
 
-def search_and_replace_in_file(filePath, searchString, replaceString):
+def search_and_replace_property_in_file(filePath, propertyKey, propertyValue):
     # Read in the file
-    with open(filePath, 'r') as file:
-        filedata = file.read()
+    with open(filePath, 'rU') as f_in, tempfile.NamedTemporaryFile(
+            'w', dir=os.path.dirname(filePath), delete=False) as f_out:
+        for line in f_in.readlines():
+            if line.split('=')[0] == (propertyKey):
+                line = '='.join(
+                    (line.split('=')[0], '{}'.format(propertyValue))) + '\n'
+            f_out.write(line)
 
-    # Replace the target string
-    filedata = filedata.replace(searchString, replaceString, 1)
+    # remove old version
+    os.unlink(filePath)
 
-    # Write the file out again
-    with open(filePath, 'w') as file:
-        file.write(filedata)
+    # rename new version
+    os.rename(f_out.name, filePath)
 
 
 def get_ip_address(ifname):
@@ -75,12 +80,11 @@ with open(os.environ["CASSANDRA_HOME"] + '/conf/cassandra.yaml') as file:
                     configurationDocument["broadcast_rpc_address"] = envValue
 
                 elif configToChange == "datacenter":
-                    search_and_replace_in_file(
-                        os.environ["CASSANDRA_HOME"] + '/conf/cassandra-rackdc.properties', 'dc=dc1', 'dc=' + envValue)  # TODO: Use wildcard instead for the search string
+                    search_and_replace_property_in_file(
+                        os.environ["CASSANDRA_HOME"] + '/conf/cassandra-rackdc.properties', 'dc', envValue)
                 elif configToChange == "rack":
-                    # TODO: Use wildcard instead for the search string
-                    search_and_replace_in_file(
-                        os.environ["CASSANDRA_HOME"] + '/conf/cassandra-rackdc.properties', 'rack=rack1', 'rack=' + envValue)
+                    search_and_replace_property_in_file(
+                        os.environ["CASSANDRA_HOME"] + '/conf/cassandra-rackdc.properties', 'rack', envValue)
 
                 else:
                     configurationDocument[configToChange] = envValue
