@@ -1,9 +1,11 @@
 # How to use
 Two docker-compose files have been provided as examples.
 
-Docker-compose.single.yml demonstrates deployment of a single cassanda node (for development purposes). Not much configuration is needed, but can be done if defaults aren't enough for your use-case ([configurations](#configurations))
+#### Docker-compose.single.yml
+This docker-compose demonstrates deployment of a single cassanda node (for development purposes). Not much configuration is needed, but can be done if defaults aren't enough for your use-case ([configurations](#configurations))
 
-Docker-compose.cluster.yml demonstrates deployment of three cassandra nodes (for production purposes). Ideally the three nodes should **not** be running on the same machine for proper fault-tolerance.
+#### Docker-compose.cluster.yml
+This docker-compose demonstrates deployment of three cassandra nodes (for production purposes). Ideally the three nodes should **not** be running on the same machine for proper fault-tolerance.
 For a clustered setup, a few more configurations are needed. ([configurations](#configurations)). **Please note the following:** 
 * cassandra1, cassandra2, cassandra3 should be replaced by either DNS-resolvable hostnames or IP-addresses of the server on which the cassandra node is running.
 * CASSANDRA_STORAGE_PORT is not mandatory to set if the nodes are running on different machines, however, this docker-compose only acts as an example and for inter-node (node-node) communication to work they need to be able to communicate.
