@@ -41,8 +41,8 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
-userEditableSettings = ["cluster_name", "seeds", "listen_address",
-                        "rpc_address", "broadcast_rpc_address" "endpoint_snitch", "broadcast_address", "datacenter", "rack", "start_rpc", "num_tokens"]
+userEditableSettings = ["cluster_name", "seeds", "listen_address", "rpc_address", "endpoint_snitch", "broadcast_address",
+                        "datacenter", "rack", "num_tokens", "storage_port", "authenticator", "authorizer"]
 
 defaultDockerIPUserSettings = ["listen_address",
                                "broadcast_rpc_address", "broadcast_address", "seeds"]
