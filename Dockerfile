@@ -28,6 +28,6 @@ EXPOSE 9042 7000
 
 VOLUME [ "${CASSANDRA_HOME}/data", "${CASSANDRA_HOME}/logs" ]
 
-WORKDIR /opt/cassandra
+WORKDIR ${CASSANDRA_HOME}
 
 CMD [ "start.sh" ]

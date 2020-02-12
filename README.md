@@ -4,12 +4,84 @@ Two docker-compose files have been provided as examples.
 #### Docker-compose.single.yml
 This docker-compose demonstrates deployment of a single cassanda node (for development purposes). Not much configuration is needed, but can be done if defaults aren't enough for your use-case ([configurations](#configurations))
 
+```
+version: "3"
+
+services:
+  cassandra:
+    image: cfei/cassandra
+    container_name: cassandra
+    ports:
+      - 9042:9042
+    restart: always
+```
+
 #### Docker-compose.cluster.yml
 This docker-compose demonstrates deployment of three cassandra nodes (for production purposes). Ideally the three nodes should **not** be running on the same machine for proper fault-tolerance.
 For a clustered setup, a few more configurations are needed. ([configurations](#configurations)). **Please note the following:** 
 * cassandra1, cassandra2, cassandra3 should be replaced by either DNS-resolvable hostnames or IP-addresses of the server on which the cassandra node is running.
 * CASSANDRA_STORAGE_PORT is not mandatory to set if the nodes are running on different machines, however, this docker-compose only acts as an example and for inter-node (node-node) communication to work they need to be able to communicate.
 * MAX_HEAP_SIZE and HEAP_NEWSIZE might be necessary to change depending on hardware and docker configuration. Cassandra ideally should have a MAX_HEAP_SIZE of atleast 4Gb Ram.
+
+```
+version: "3"
+
+services:
+  cassandra1:
+    image: cfei/cassandra
+    container_name: cassandra1
+    ports:
+      - 9042:9042
+      - 7000:7000
+    environment:
+      CASSANDRA_CLUSTER_NAME: "reference-cluster"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2,cassandra3"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+      CASSANDRA_BROADCAST_ADDRESS: "cassandra1"
+      CASSANDRA_DATACENTER: dc1Test
+      CASSANDRA_RACK: rack1Test
+      CASSANDRA_STORAGE_PORT: 7000
+      MAX_HEAP_SIZE: 1G
+      HEAP_NEWSIZE: 200M
+    restart: always
+
+  cassandra2:
+    image: cfei/cassandra
+    container_name: cassandra2
+    ports:
+      - 9043:9042
+      - 7001:7001
+    environment:
+      CASSANDRA_CLUSTER_NAME: "reference-cluster"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2,cassandra3"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+      CASSANDRA_BROADCAST_ADDRESS: "cassandra2"
+      CASSANDRA_DATACENTER: dc1Test
+      CASSANDRA_RACK: rack1Test
+      CASSANDRA_STORAGE_PORT: 7001
+      MAX_HEAP_SIZE: 1G
+      HEAP_NEWSIZE: 200M
+    restart: always
+
+  cassandra3:
+    image: cfei/cassandra
+    container_name: cassandra3
+    ports:
+      - 9044:9042
+      - 7002:7002
+    environment:
+      CASSANDRA_CLUSTER_NAME: "reference-cluster"
+      CASSANDRA_SEEDS: "cassandra1,cassandra2,cassandra3"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+      CASSANDRA_BROADCAST_ADDRESS: "cassandra3"
+      CASSANDRA_DATACENTER: dc1Test
+      CASSANDRA_RACK: rack1Test
+      CASSANDRA_STORAGE_PORT: 7002
+      MAX_HEAP_SIZE: 1G
+      HEAP_NEWSIZE: 200M
+    restart: always
+
+```
 
 # Configurations
 **Configurations required for a clustered setup**
