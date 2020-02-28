@@ -6,4 +6,7 @@ services:
     container_name: cassandra
     ports:
       - 9042:9042
+    volumes:
+      - ./data:/opt/cassandra/data
+      - ./logs:/opt/cassandra/logs
     restart: always
