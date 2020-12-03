@@ -28,4 +28,7 @@ sysctl vm.max_map_count=1048575
 
 # -f running cassandra in foreground
 # -R force cassandra to run as root
-/opt/cassandra/bin/cassandra -f -R
+/opt/cassandra/bin/cassandra -R
+
+trap '/opt/cassandra/bin/nodetool stopdaemon && exit 0' SIGTERM
+while true; do :; done

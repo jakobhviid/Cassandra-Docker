@@ -4,8 +4,13 @@ ENV CASSANDRA_HOME=/opt/cassandra
 
 RUN apt update && \
     apt install -y --no-install-recommends openjdk-8-jre-headless && \
-    apt install -y python3 python3-pip && \
-    pip3 install pyyaml
+    apt install -y python
+	
+# Install pip for python2.7 and the pip module pyyaml
+COPY ./get-pip.py /tmp/
+RUN python /tmp/get-pip.py
+run pip install pyyaml
+
 
 # Copy necessary scripts + configuration
 COPY scripts /tmp/
