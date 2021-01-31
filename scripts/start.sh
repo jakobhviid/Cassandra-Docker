@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function cleanup(){
+	/opt/cassandra/bin/nodetool stopdaemon
+	local e1=$?
+	echo "Cassandra Stopped"
+	exit $e1
+}
+
 echo "INFO - Configuring Cassandra"
 
 # Enable the use of environment variables CASSANDRA_MAX_HEAP_SIZE and CASSANDRA_HEAP_NEWSIZE
@@ -26,9 +33,9 @@ echo "INFO - Starting Cassandra"
 sysctl vm.swappiness=0
 sysctl vm.max_map_count=1048575
 
-# -f running cassandra in foreground
 # -R force cassandra to run as root
 /opt/cassandra/bin/cassandra -R
 
-trap '/opt/cassandra/bin/nodetool stopdaemon && exit 0' SIGTERM
+trap cleanup SIGTERM SIGINT
+
 while true; do :; done
